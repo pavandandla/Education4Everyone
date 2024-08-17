@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSP's Python Course</title>
+    <link href="styles/welcome.css" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #cc99ff, #e6ccff);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background-color: #b3c6ff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .buttons a {
+            text-decoration: none;
+            color: #fff;
+            background-color: #0072ff;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            margin: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .buttons a:hover {
+            background-color: #0056b3;
+        }
+        .buttons a.register {
+            background-color: #28a745;
+        }
+        .buttons a.register:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>About DSP's Learning Platform</h1>
+        <p>Welcome to DSP's Learning Platform, your ultimate destination for mastering Python and other programming languages. Our platform is designed to cater to both beginners and advanced learners, offering a range of courses that are tailored to help you achieve your learning goals.</p>
+        <p>At DSP, we believe in the power of education and strive to provide high-quality, accessible learning experiences. Our courses are crafted by industry experts and are packed with practical exercises, real-world examples, and comprehensive tutorials to ensure you gain the skills and knowledge needed to excel in today's competitive tech landscape.</p>
+        <p>Join our community of learners today and take the first step towards mastering Python and other essential technologies. Whether you're looking to start a new career or enhance your current skills, DSP's Learning Platform has something for everyone.</p>
+        
+        <div class="buttons">
+            <a style="background-color: #99ff99" href="{{ url_for('content_viewer') }}">Back</a>
+
+        </div>
+    </div>
+
+
+</body>
+</html>

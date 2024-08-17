@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSP's Python Course</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #d3d3d3;
+        }
+
+        .header {
+            background-color: #bebebe;
+            color: black;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header a {
+            color: black;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .header a:hover {
+            opacity: 0.8;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo span {
+            margin-left: 0.4em;
+            font-weight: 800;
+        }
+
+        .logout-button {
+            background-color: #545454; /* Color for logout */
+            color: black;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .logout-button:hover {
+            background-color: #c0392b; /* Darker red on hover */
+        }
+
+        .main {
+            display: flex;
+            flex-grow: 1;
+        }
+
+        .sidebar {
+            background-color: #f1f1f1;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            width: 200px; /* Fixed width for sidebar */
+        }
+
+        .sidebar h2 {
+            margin-top: 0;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .sidebar li:hover {
+            background-color: #e6e6e6;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: black;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.6.em;
+        }
+
+        h2 {
+            color: black;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        h3 {
+            color: black;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        p {
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+
+        ul {
+            margin-left: 20px;
+            font-size: 1.1em;
+        }
+
+        .footer {
+            background-color: #bebebe;
+            color: black;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.8em;
+        }
+
+        .footer a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 206 246" fill="none">
+                <circle cx="40" cy="40" r="40" fill="currentColor"></circle>
+                <circle cx="40" cy="206" r="40" fill="currentColor"></circle>
+                <circle cx="166" cy="120" r="40" fill="currentColor"></circle>
+            </svg>
+            <span>DSP's Python Course</span>
+        </div>
+        <div>
+            <a href="{{ url_for('pythonmain') }}">Python Course</a>
+            <a href="{{ url_for('about') }}">About</a> <!-- Added margin-left to create space -->
+        </div>
+        <button class="logout-button" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="main">
+        <div class="content">
+            <h1>Welcome to DSP's Python Course</h1>
+
+            <div class="content">
+                <h2>Course Overview</h2>
+                <p>This course, designed by DSP, offers a comprehensive introduction to Python programming. Whether you are a beginner or have some experience, this course will help you master Python and apply it effectively in various projects and problem-solving scenarios.</p>
+
+                <h3>What You Will Learn</h3>
+                <p>Throughout the course, you'll explore a wide range of topics, including:</p>
+                <ul>
+                    <li>Python basics: syntax, variables, and data types</li>
+                    <li>Control structures: loops and conditionals</li>
+                    <li>Functions and modules</li>
+                    <li>Object-oriented programming in Python</li>
+                    <li>Working with libraries and frameworks</li>
+                    <li>Advanced topics: generators, decorators, and context managers</li>
+                </ul>
+
+                <h3>Who Should Enroll?</h3>
+                <p>This course is perfect for:</p>
+                <ul>
+                    <li>Beginners with no prior programming experience.</li>
+                    <li>Intermediate learners looking to solidify their Python skills.</li>
+                    <li>Advanced learners seeking to deepen their knowledge of Python's advanced features.</li>
+                </ul>
+
+                <h2>Course Benefits</h2>
+                <p>By the end of this course, you will have a strong foundation in Python programming, enabling you to develop applications, analyze data, and automate tasks with confidence.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2023 DSP. All rights reserved.</p>
+    </div>
+
+    <script>
+        function logout() {
+            // Redirect to the welcome page
+            window.location.href = '/'; // Change this to your welcome page URL
+        }
+
+        function scrollToSidebar() {
+            var sidebar = document.getElementById("sidebar");
+            sidebar.scrollIntoView({ behavior: "smooth" });
+        }
+    </script>
+</body>
+</html>
