@@ -4,174 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Content Viewer</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #d3d3d3;
-        }
-
-        .header {
-            background-color: #bebebe;
-            color: black;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header a {
-            color: black;
-            text-decoration: none;
-            margin-left: 20px;
-        }
-
-        .header a:hover {
-            opacity: 0.8;
-        }
-
-        .header-logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .header-logo span {
-            margin-left: 0.4em;
-            font-weight: 800;
-        }
-
-        .logout-button {
-            background-color: #545454; /* Color for logout */
-            color: black;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .logout-button:hover {
-            background-color: #c0392b; /* Darker red on hover */
-        }
-
-        .main {
-            display: flex;
-            flex-grow: 1;
-            height: 100vh;
-        }
-
-        .sidebar {
-            background-color: #f1f1f1;
-            padding: 20px;
-            border-right: 1px solid #ddd;
-            width: 200px; /* Fixed width for sidebar */
-        }
-
-        .sidebar h2 {
-            margin-top: 0;
-        }
-
-        .sidebar ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .sidebar li {
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 15px;
-            
-        }
-
-        .sidebar li:hover {
-            background-color: #d3d3d3;
-        }
-
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            color: black;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.6.em;
-        }
-
-        h2 {
-            color: black;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-
-        h3 {
-            color: black;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-
-        p {
-            line-height: 1.6;
-            font-size: 1.1em;
-        }
-
-        ul {
-            margin-left: 20px;
-            font-size: 1.1em;
-        }
-
-        
-        .content iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            color: #2980b9;
-            margin-bottom: 10px;
-        }
-
-        h3 {
-            color: #16a085;
-            margin-bottom: 5px;
-        }
-
-        p {
-            line-height: 1.6;
-        }
-        .footer {
-            background-color: #bebebe;
-            color: black;
-            padding: 3px;
-            text-align: center;
-            font-size: 0.8em;
-        }
-
-        .footer a {
-            color: black;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            opacity: 0.8;
-        }
-    </style>
+    <link href="static/pythonmain.css" rel="stylesheet"/>
 </head>
-<body>
+<body class="body">
     <div class="header">
         <div class="header-logo">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 206 246" fill="none">
@@ -183,26 +18,35 @@
         </div>
         <div>
             <a href="{{ url_for('pythonmain') }}">Python Course</a>
-            <a href="{{ url_for('about') }}">About</a> <!-- Added margin-left to create space -->
+            <a href="{{ url_for('about') }}">About</a>
         </div>
         <button class="logout-button" onclick="logout()">Logout</button>
     </div>
 
     <div class="main">
         <div class="sidebar" id="sidebar">
-            <h2>Content</h2>
+            <h2 class="h2">Content</h2>
             
-            <ul>
+            <ul class="ul">
                 <li onclick="showContent('Python_Intro')">Python Intro</li>
                 <li onclick="showContent('pythonget')">Python Getstarted</li>
                 <li onclick="showContent('pythonsyntax')">Python Syntax</li>
+                <li onclick="showContent('comments')">Python Comments</li>
+                <li onclick="toggleSubList('variableList')">Python Variables</li>
+                <ul class="sub-list" id="variableList" style="display: none;">
+                    <li onclick="showContent('python_variables')">Python Variables</li>
+                    <li onclick="showContent('variable_names')">Variable Names</li>
+                    <li onclick="showContent('assign_multiple_values')">Assign Multiple Values</li>
+                    <li onclick="showContent('output_variables')">Output Variables</li>
+                    <li onclick="showContent('global_variables')">Global Variables</li>
+                </ul>
                 <li onclick="toggleSubList('videoList')">Videos</li>
-                <ul class="sub-list" id="videoList">
+                <ul class="sub-list" id="videoList" style="display: none;">
                     <li onclick="showContent('video1')">Video 1</li>
                     <li onclick="showContent('video2')">Video 2</li>
                 </ul>
                 <li onclick="toggleSubList('textList')">Texts</li>
-                <ul class="sub-list" id="textList">
+                <ul class="sub-list" id="textList" style="display: none;">
                     <li onclick="showContent('text1')">Text 1</li>
                     <li onclick="showContent('text2')">Text 2</li>
                 </ul>
@@ -213,9 +57,11 @@
             <iframe id="content-frame"></iframe>
         </div>
     </div>
+
     <div class="footer">
-        <p>&copy; 2023 DSP. All rights reserved.</p>
+        <p class="p">&copy; 2023 DSP. All rights reserved.</p>
     </div>
+
     <script>
         function showContent(id) {
             var contentFrame = document.getElementById('content-frame');
@@ -230,6 +76,24 @@
                 case 'pythonsyntax': 
                      contentFrame.src = "{{ url_for('Python_syntax') }}";
                      break;
+                case 'comments': 
+                     contentFrame.src = "{{ url_for('comments') }}";
+                     break;
+                case 'python_variables':
+                    contentFrame.src = "{{ url_for('variables') }}";
+                    break;
+                case 'variable_names':
+                    contentFrame.src = "{{ url_for('variable_names') }}";
+                    break;
+                case 'assign_multiple_values':
+                    contentFrame.src = "{{ url_for('assign_multiple_values') }}";
+                    break;
+                case 'output_variables':
+                    contentFrame.src = "{{ url_for('output_variables') }}";
+                    break;
+                case 'global_variables':
+                    contentFrame.src = "{{ url_for('global_variables') }}";
+                    break;
                 case 'video1':
                     contentFrame.src = 'https://www.youtube.com/embed/SJZGgPD-tbE?autoplay=0&mute=0';
                     break;
@@ -251,13 +115,7 @@
         }
 
         function logout() {
-            // Redirect to the welcome page
             window.location.href = '/'; // Change this to your welcome page URL
-        }
-
-        function scrollToSidebar() {
-            var sidebar = document.getElementById("sidebar");
-            sidebar.scrollIntoView({ behavior: "smooth" });
         }
 
         function toggleSubList(id) {

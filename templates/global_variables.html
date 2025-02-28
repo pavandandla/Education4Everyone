@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python - Global Variables</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .example {
+            border-left: 4px solid #4CAF50;
+            padding-left: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Python - Global Variables</h1>
+
+    <h2>Global Variables</h2>
+    <p>Variables that are created outside of a function (as in all of the examples in the previous pages) are known as global variables.</p>
+    <p>Global variables can be used by everyone, both inside of functions and outside.</p>
+
+    <div class="example">
+        <pre><code>x = "awesome"
+
+def myfunc():
+    print("Python is " + x)
+
+myfunc()</code></pre>
+    </div>
+
+    <p>If you create a variable with the same name inside a function, this variable will be local, and can only be used inside the function. The global variable with the same name will remain as it was, global and with the original value.</p>
+
+    <div class="example">
+        <pre><code>x = "awesome"
+
+def myfunc():
+    x = "fantastic"
+    print("Python is " + x)
+
+myfunc()
+
+print("Python is " + x)</code></pre>
+    </div>
+
+    <h2>The <code>global</code> Keyword</h2>
+    <p>Normally, when you create a variable inside a function, that variable is local, and can only be used inside that function.</p>
+    <p>To create a global variable inside a function, you can use the <code>global</code> keyword.</p>
+
+    <div class="example">
+        <pre><code>def myfunc():
+    global x
+    x = "fantastic"
+
+myfunc()
+
+print("Python is " + x)</code></pre>
+    </div>
+
+    <p>Also, use the <code>global</code> keyword if you want to change a global variable inside a function.</p>
+
+    <div class="example">
+        <pre><code>x = "awesome"
+
+def myfunc():
+    global x
+    x = "fantastic"
+
+myfunc()
+
+print("Python is " + x)</code></pre>
+    </div>
+
+</body>
+</html>

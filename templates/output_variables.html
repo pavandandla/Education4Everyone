@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python - Output Variables</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .example {
+            border-left: 4px solid #4CAF50;
+            padding-left: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Python - Output Variables</h1>
+
+    <h2>Output Variables</h2>
+    <p>The Python <code>print()</code> function is often used to output variables.</p>
+
+    <div class="example">
+        <pre><code>x = "Python is awesome"
+print(x)</code></pre>
+    </div>
+
+    <p>In the <code>print()</code> function, you can output multiple variables, separated by a comma:</p>
+
+    <div class="example">
+        <pre><code>x = "Python"
+y = "is"
+z = "awesome"
+print(x, y, z)</code></pre>
+    </div>
+
+    <p>You can also use the <code>+</code> operator to output multiple variables:</p>
+
+    <div class="example">
+        <pre><code>x = "Python "
+y = "is "
+z = "awesome"
+print(x + y + z)</code></pre>
+    </div>
+
+    <p><strong>Note:</strong> Notice the space character after <code>"Python "</code> and <code>"is "</code>, without them the result would be <code>"Pythonisawesome"</code>.</p>
+
+    <h2>Using the + Operator with Numbers</h2>
+    <p>For numbers, the <code>+</code> character works as a mathematical operator:</p>
+
+    <div class="example">
+        <pre><code>x = 5
+y = 10
+print(x + y)</code></pre>
+    </div>
+
+    <h2>Combining Strings and Numbers</h2>
+    <p>In the <code>print()</code> function, when you try to combine a string and a number with the <code>+</code> operator, Python will give you an error:</p>
+
+    <div class="example">
+        <pre><code>x = 5
+y = "John"
+print(x + y)</code></pre>
+    </div>
+
+    <p>The best way to output multiple variables in the <code>print()</code> function is to separate them with commas, which even support different data types:</p>
+
+    <div class="example">
+        <pre><code>x = 5
+y = "John"
+print(x, y)</code></pre>
+    </div>
+
+</body>
+</html>

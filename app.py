@@ -3,11 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import random
 import string
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your_unique_secret_key'  # Change this to a random string
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Pavan%4012@localhost/registration'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -100,6 +101,30 @@ def pythonget():
 def Python_syntax():
     return render_template('Python_syntax.html')  # New route for the Python_syntax page
 
+@app.route('/comments')
+def comments():
+    return render_template('comments.html')  # New route for the comments page
+
+@app.route('/variables')
+def variables():
+    return render_template('variables.html')  # New route for the variables page
+
+@app.route('/variable_names')
+def variable_names():
+    return render_template('variable_names.html')  # New route for the variable_names page
+
+@app.route('/assign_multiple_values')
+def assign_multiple_values():
+    return render_template('assign_multiple_values.html')  # New route for the assign_multiple_values page
+
+@app.route('/output_variables')
+def output_variables():
+    return render_template('output_variables.html')  # New route for the output_variables page
+
+@app.route('/global_variables')
+def global_variables():
+    return render_template('global_variables.html')  # New route for the global_variables page
+
 @app.route('/forgot_username', methods=['GET', 'POST'])
 def forgot_username():
     if request.method == 'POST':
@@ -148,4 +173,4 @@ def change_password(username, temp_password):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)

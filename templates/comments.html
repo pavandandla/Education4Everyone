@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Comments</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .example {
+            border-left: 4px solid #4CAF50;
+            padding-left: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Python Comments</h1>
+    <p>Comments can be used to explain Python code.</p>
+    <p>Comments can be used to make the code more readable.</p>
+    <p>Comments can be used to prevent execution when testing code.</p>
+
+    <h2>Creating a Comment</h2>
+    <p>Comments start with a <code>#</code>, and Python will ignore them:</p>
+
+    <div class="example">
+        <pre><code># This is a comment
+print("Hello, World!")</code></pre>
+    </div>
+
+    <p>Comments can be placed at the end of a line, and Python will ignore the rest of the line:</p>
+
+    <div class="example">
+        <pre><code>print("Hello, World!")  # This is a comment</code></pre>
+    </div>
+
+    <p>A comment does not have to be text that explains the code; it can also be used to prevent Python from executing code:</p>
+
+    <div class="example">
+        <pre><code># print("Hello, World!")
+print("Cheers, Mate!")</code></pre>
+    </div>
+
+    <h2>Multiline Comments</h2>
+    <p>Python does not really have a syntax for multiline comments.</p>
+    <p>To add a multiline comment, you could insert a <code>#</code> for each line:</p>
+
+    <div class="example">
+        <pre><code># This is a comment
+# written in
+# more than just one line
+print("Hello, World!")</code></pre>
+    </div>
+
+    <p>Or, not quite as intended, you can use a multiline string.</p>
+    <p>Since Python will ignore string literals that are not assigned to a variable, you can add a multiline string (triple quotes) in your code, and place your comment inside it:</p>
+
+    <div class="example">
+        <pre><code>"""
+This is a comment
+written in
+more than just one line
+"""
+print("Hello, World!")</code></pre>
+    </div>
+
+    <p>As long as the string is not assigned to a variable, Python will read the code, but then ignore it, and you have made a multiline comment.</p>
+
+</body>
+</html>
