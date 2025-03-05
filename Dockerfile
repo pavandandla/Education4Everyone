@@ -1,5 +1,5 @@
 #Use python version 3.11
-FROM python:3.1
+FROM python:3.11
 
 #Copy requirements into docker
 COPY requirements.txt .
