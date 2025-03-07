@@ -1,0 +1,37 @@
+
+.body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+    margin: 20px;
+    padding: 20px;
+    line-height: 1.6;
+}
+.h1 {
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+.h2 {
+    color: #007bff;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+.p {
+    margin-bottom: 15px;
+}
+.code {
+    background-color: #f1f1f1;
+    border-radius: 4px;
+    padding: 2px 4px;
+    font-size: 1em;
+    color: #d63384;
+}
+.pre {
+    background-color: #f1f1f1;
+    border-radius: 4px;
+    padding: 10px;
+    overflow-x: auto;
+    white-space: pre-wrap; /* For proper code wrapping */
+}

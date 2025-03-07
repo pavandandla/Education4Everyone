@@ -1,0 +1,164 @@
+.body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #d3d3d3;
+}
+
+.header {
+    background-color: #bebebe;
+    color: black;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header a {
+    color: black;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.header a:hover {
+    opacity: 0.8;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+}
+
+.header-logo span {
+    margin-left: 0.4em;
+    font-weight: 800;
+}
+
+.logout-button {
+    background-color: #545454; /* Color for logout */
+    color: black;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.logout-button:hover {
+    background-color: #c0392b; /* Darker red on hover */
+}
+
+.main {
+    display: flex;
+    flex-grow: 1;
+    height: 100vh;
+}
+
+.sidebar {
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    width: 200px; /* Fixed width for sidebar */
+}
+
+.sidebar h2 {
+    margin-top: 0;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar li {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 15px;
+    
+}
+
+.sidebar li:hover {
+    background-color: #d3d3d3;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.h1 {
+    color: black;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.6.em;
+}
+
+.h2 {
+    color: black;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.h3 {
+    color: black;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.p {
+    line-height: 1.6;
+    font-size: 1.1em;
+}
+
+.ul {
+    margin-left: 20px;
+    font-size: 1.1em;
+}
+
+
+.content iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.h2 {
+    color: #2980b9;
+    margin-bottom: 10px;
+}
+
+.h3 {
+    color: #16a085;
+    margin-bottom: 5px;
+}
+
+.p {
+    line-height: 1.6;
+}
+.footer {
+    background-color: #bebebe;
+    color: black;
+    padding: 3px;
+    text-align: center;
+    font-size: 0.8em;
+}
+
+.footer a {
+    color: black;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    opacity: 0.8;
+}
