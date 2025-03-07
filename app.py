@@ -3,11 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import random
 import string
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your_unique_secret_key'  # Change this to a random string
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Pavan%4012@localhost/registration'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI') 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -148,4 +149,4 @@ def change_password(username, temp_password):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True) 

@@ -1,19 +1,32 @@
-#Use python version 3.11
-FROM python:3.11
+# Use an official lightweight Python image.
+FROM python:3.11-slim
 
-#Copy requirements into docker
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Set work directory
+WORKDIR /app
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    libmariadb-dev \
+    libmariadb-dev-compat \
+    pkg-config \
+    libssl-dev \
+    libffi-dev \
+    build-essential
+
 COPY requirements.txt .
 
-#Install all requirements
-RUN pip install -r requirements.txt
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-#Copy the rest of the code into the container
+# Copy project
 COPY . .
-#Set port environment variable
-ENV PORT=5001
 
-#Expose the port so our computer can acess it 
+# Make port available to the world outside this container
 EXPOSE 5001
 
-#Run the app
-CMD ["python", "app.py"]
+# Add a delay before running the app
+CMD sleep 10 && python app.py
