@@ -1,5 +1,5 @@
-# Use an official lightweight Python image.
-FROM python:3.11-slim
+# Use an official lightweight Python image based on Alpine
+FROM python:3.11-alpine
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -7,15 +7,6 @@ ENV PYTHONUNBUFFERED 1
 
 # Set work directory
 WORKDIR /app
-
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    libmariadb-dev \
-    libmariadb-dev-compat \
-    pkg-config \
-    libssl-dev \
-    libffi-dev \
-    build-essential
 
 COPY requirements.txt .
 
