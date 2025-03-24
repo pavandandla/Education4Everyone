@@ -99,4 +99,4 @@ jobs:
         
     - name: Update service.yaml with EC2 public IP
       run: |
-        sudo kubectl port-forward --address 0.0.0.0 svc/flask-service 30259:80
+        sudo kubectl port-forward --address 0.0.0.0 svc/flask-service 5001:80
