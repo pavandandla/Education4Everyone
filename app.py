@@ -170,6 +170,11 @@ def change_password(username, temp_password):
         
     return render_template('change_password.html', username=username)
 
+@app.route('/deployment')
+def deployment():
+    return "Deployment Successful!", 200
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
