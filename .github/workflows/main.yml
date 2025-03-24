@@ -1,0 +1,102 @@
+name: Deploy to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install AWS CDK
+      run: |
+        npm install -g aws-cdk
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Deploy with CDK
+      run: |
+        cdk deploy --require-approval never
+
+    - name: Set up Kubernetes dependencies
+      run: |
+        sudo apt update && apt install -y curl
+        curl --version
+        sudo snap install kubectl --classic
+        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        sudo install minikube-linux-amd64 /usr/local/bin/minikube
+        sudo apt install -y docker.io
+        sudo minikube start --driver=docker
+
+    - name: Create deployment.yaml
+      run: |
+        cat <<EOF > deployment.yaml
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: flask-deployment
+          labels:
+            app: flask-app
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              app: flask-app
+          template:
+            metadata:
+              labels:
+                app: flask-app
+            spec:
+              containers:
+              - name: flask-app
+                image: public.ecr.aws/g2a4v8o8/edutech:latest
+                ports:
+                - containerPort: 5001
+                env:
+                - name: SQLALCHEMY_DATABASE_URI
+                  value: "mysql://avnadmin:AVNS_-jsHTQVpt0c48J4oDF8@mysql-172f5ac6-dandlapavankumar-d7a9.f.aivencloud.com:26972/defaultdb"
+        EOF
+
+    - name: Create service.yaml
+      run: |
+        cat <<EOF > service.yaml
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: flask-service
+        spec:
+          selector:
+            app: flask-app
+          ports:
+            - protocol: TCP
+              port: 80
+              targetPort: 5001
+          type: LoadBalancer
+        EOF
+
+    - name: Apply Kubernetes manifests
+      run: |
+        sudo kubectl apply -f deployment.yaml
+        sudo kubectl apply -f service.yaml
+        sudo minikube service flask-service
+        
+    - name: Update service.yaml with EC2 public IP
+      run: |
+        sudo kubectl port-forward --address 0.0.0.0 svc/flask-service 30259:80
