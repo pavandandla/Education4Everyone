@@ -82,13 +82,15 @@ jobs:
         metadata:
           name: flask-service
         spec:
+          type: LoadBalancer  
           selector:
             app: flask-app
           ports:
             - protocol: TCP
               port: 80
               targetPort: 5001
-          type: LoadBalancer
+              nodePort: 30259  
+
         EOF
 
     - name: Apply Kubernetes manifests
@@ -99,4 +101,4 @@ jobs:
         
     - name: Update service.yaml with EC2 public IP
       run: |
-        sudo kubectl port-forward --address 0.0.0.0 svc/flask-service 5001:80
+        sudo kubectl port-forward --address 0.0.0.0 svc/flask-service 30259:80
