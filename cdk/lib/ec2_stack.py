@@ -10,10 +10,9 @@ class EC2Stack(Stack):
         super().__init__(scope, id, **kwargs)
 
         # 1. Reference existing EC2 instance
-        instance = ec2.Instance.from_instance_attributes(
+        instance = ec2.Instance.from_instance_id(
             self, "ExistingInstance",
-            instance_id="i-06a682ac329b5a73a",  # Replace with your instance ID
-            availability_zone="us-east-1"  # Replace with your instance's AZ
+            instance_id="i-06a682ac329b5a73a"  # Replace with your instance ID
         )
 
         # 2. Add security group rules
