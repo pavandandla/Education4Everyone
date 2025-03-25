@@ -29,8 +29,8 @@ jobs:
 
     - name: Configure AWS credentials
       run: |
-        export AWS_SECRET_ACCESS_KEY=$(echo "${{ secrets.AWS_SECRET_ACCESS_KEY_BASE64 }}" | base64 --decode)
-        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+        export AWS_SECRET_ACCESS_KEY=$(echo "${{ vars.AWS_SECRET_ACCESS_KEY_BASE64 }}" | base64 --decode)
+        aws configure set aws_access_key_id ${{ vars.AWS_ACCESS_KEY_ID }}
         aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
         aws configure set default.region us-east-1
         
