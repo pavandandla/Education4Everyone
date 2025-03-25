@@ -158,8 +158,8 @@ jobs:
           # Verify Minikube status
           minikube status
           minikube ip
-          sudo kubectl apply -f deployment.yaml --validate=false
-          sudo kubectl apply -f service.yaml --validate=false
+          kubectl apply -f k8s-manifests/deployment.yaml
+          kubectl apply -f k8s-manifests/service.yaml
           sudo minikube service flask-service
 
 
