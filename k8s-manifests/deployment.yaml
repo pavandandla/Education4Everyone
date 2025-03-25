@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment
+  labels:
+    app: flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+      - name: flask-app
+        image: public.ecr.aws/g2a4v8o8/edutech:latest
+        ports:
+        - containerPort: 5001
+        env:
+        - name: SQLALCHEMY_DATABASE_URI
+          value: "mysql://avnadmin:AVNS_-jsHTQVpt0c48J4oDF8@mysql-172f5ac6-dandlapavankumar-d7a9.f.aivencloud.com:26972/defaultdb"

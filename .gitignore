@@ -1,5 +1,2 @@
 # Deployment code
-deployment.yaml
-service.yaml
-ingress.yaml
 .env
