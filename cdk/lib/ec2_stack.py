@@ -1,12 +1,13 @@
 from aws_cdk import (
     Stack,
     aws_ec2 as ec2,
-    aws_iam as iam,
+    aws_iam as iam,  # Import IAM if needed for future enhancements
     CfnOutput
 )
+from constructs import Construct  # Import Construct for scope typing
 
 class EC2Stack(Stack):
-    def __init__(self, scope: Stack, id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # 1. Reference existing EC2 instance
