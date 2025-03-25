@@ -34,21 +34,32 @@ jobs:
         run: |
           aws sts get-caller-identity
 
-      - name: Bootstrap CDK
+      - name: Login to EC2 via AWS Systems Manager (SSM)
         run: |
-          cdk bootstrap aws://$(aws sts get-caller-identity --query Account --output text)/us-east-1
+          EC2_INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=edu-learn" --query "Reservations[*].Instances[*].InstanceId" --output text)
+          echo "EC2 Instance ID: $EC2_INSTANCE_ID"
 
-      - name: Acknowledge CDK Notice
-        run: |
-          cdk acknowledge 32775
+          aws ssm send-command \
+            --document-name "AWS-RunShellScript" \
+            --targets "Key=instanceIds,Values=$EC2_INSTANCE_ID" \
+            --parameters 'commands=["echo Connected to EC2 via SSM", "whoami", "uname -a"]' \
+            --region us-east-1
 
-      - name: Deploy with CDK
-        run: |
-          export PYTHONPATH="\${PYTHONPATH}:\${PWD}/cdk"
-          cd cdk
-          python app.py
-          cd ..
-          cdk deploy --require-approval never
+      #- name: Bootstrap CDK
+        #run: |
+          #cdk bootstrap aws://$(aws sts get-caller-identity --query Account --output text)/us-east-1
+
+      #- name: Acknowledge CDK Notice
+        #run: |
+          #cdk acknowledge 32775
+
+      #- name: Deploy with CDK
+        #run: |
+          #export PYTHONPATH="\${PYTHONPATH}:\${PWD}/cdk"
+          #cd cdk
+          #python app.py
+          #cd ..
+          #cdk deploy --require-approval never
           
       - name: Set up Kubernetes dependencies
         run: |
