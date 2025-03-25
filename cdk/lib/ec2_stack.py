@@ -10,13 +10,7 @@ class EC2Stack(Stack):
         super().__init__(scope, id, **kwargs)
 
         # 1. Reference existing EC2 instance
-        instance = ec2.Instance.from_instance_attributes(
-            self, "ExistingInstance",
-            instance_id="i-06a682ac329b5a73a",  
-            security_group=ec2.SecurityGroup.from_security_group_id(
-                self, "SecurityGroup", "sg-0f9cd5dedbf2c1b44"  
-            ),
-        )
+        instance = ec2.Instance.from_lookup(scope=self, id="MyInstance", instance_id="i-06a682ac329b5a73a")
 
         # 3. Outputs
         CfnOutput(
