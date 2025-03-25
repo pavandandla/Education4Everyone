@@ -149,6 +149,11 @@ jobs:
       
       - name: Apply Kubernetes manifests
         run: |
+          kubectl config set-cluster minikube --server=https://192.168.49.2:8443
+          kubectl config set-context minikube --cluster=minikube --user=minikube
+          kubectl config use-context minikube
+          minikube stop
+          minikube start
           # Verify Minikube status
           minikube status
           minikube ip
