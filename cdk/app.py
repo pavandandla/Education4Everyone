@@ -1,5 +1,5 @@
 from aws_cdk import App
-from lib.ec2_stack import EC2Stack
+from .lib.ec2_stack import EC2Stack
 
 
 app = App()
