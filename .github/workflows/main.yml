@@ -38,10 +38,15 @@ jobs:
         run: |
           cdk bootstrap aws://$(aws sts get-caller-identity --query Account --output text)/us-east-1
 
+      - name: Acknowledge CDK Notice
+        run: |
+          cdk acknowledge 32775
+
       - name: Deploy with CDK
         run: |
-          PYTHONPATH=$(pwd)/cdk cdk deploy --app "python cdk/app.py" --require-approval never
-
+          export PYTHONPATH="\${PYTHONPATH}:\${PWD}/cdk"
+          cdk deploy --app "python cdk/app.py" --require-approval never
+          
       - name: Set up Kubernetes dependencies
         run: |
           sudo apt update && apt install -y curl
