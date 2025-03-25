@@ -99,9 +99,6 @@ jobs:
           
           # Start Minikube with Docker as the driver
           minikube start --driver=docker
-          
-          # Verify Minikube status
-          minikube status
 
       - name: Create deployment.yaml
         run: |
@@ -149,9 +146,12 @@ jobs:
                 targetPort: 5001
                 nodePort: 30259  
           EOF
-
+      
       - name: Apply Kubernetes manifests
         run: |
+          # Verify Minikube status
+          minikube status
+          minkube ip
           sudo kubectl apply -f deployment.yaml --validate=false
           sudo kubectl apply -f service.yaml --validate=false
           sudo minikube service flask-service
