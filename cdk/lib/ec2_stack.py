@@ -1,11 +1,12 @@
 from aws_cdk import (
-    core,
+    Stack,
     aws_ec2 as ec2,
     aws_iam as iam,
+    CfnOutput
 )
 
-class EC2Stack(core.Stack):
-    def __init__(self, scope: core.Stack, id: str, **kwargs) -> None:
+class EC2Stack(Stack):
+    def __init__(self, scope: Stack, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # 1. Reference existing EC2 instance
@@ -21,8 +22,8 @@ class EC2Stack(core.Stack):
         )
 
         # 3. Outputs
-        core.CfnOutput(
+        CfnOutput(
             self, "InstancePublicIP",
-            value=instance.instance_public_ip.apply(lambda ip: ip if ip else "N/A"),
+            value=instance.instance_public_ip,
             description="Public IP address of the EC2 instance"
         )
