@@ -86,8 +86,7 @@ jobs:
           minikube version
           
           # Install Docker
-          sudo apt remove containerd
-          sudo apt autoremove
+          sudo apt remove -y containerd.io runc
           sudo apt install -y docker.io
           sudo systemctl enable --now docker
           sudo usermod -aG docker $USER
