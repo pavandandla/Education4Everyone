@@ -113,6 +113,11 @@ jobs:
           minikube ip
           kubectl apply -f k8s-manifests/deployment.yaml
           kubectl apply -f k8s-manifests/service.yaml
+          minikube profile list
+          minikube start
+          kubectl get deployments
+          kubectl get services
+          kubectl get pods
           sudo minikube service flask-service
 
 
