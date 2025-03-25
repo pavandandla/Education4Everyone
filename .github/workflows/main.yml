@@ -27,28 +27,25 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Configure AWS credentials
+    - name: Configure AWS credentials using IAM Role
       run: |
-        export AWS_SECRET_ACCESS_KEY=$(echo "${{ vars.AWS_SECRET_ACCESS_KEY_BASE64 }}" | base64 --decode)
-        aws configure set aws_access_key_id ${{ vars.AWS_ACCESS_KEY_ID }}
-        aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
-        aws configure set default.region us-east-1
+        export AWS_ROLE_ARN="arn:aws:iam::288761772602:instance-profile/pavan"
+        export AWS_REGION="us-east-1"
         
-    - name: Verify AWS Authentication
-      run: aws sts get-caller-identity
+        # Verify AWS authentication using the IAM role
+        curl -X GET "http://169.254.169.254/latest/meta-data/iam/security-credentials/"
+        aws sts get-caller-identity
 
     - name: Deploy with CDK
       run: |
         cdk deploy --require-approval never
 
-    - name: Set up Kubernetes dependencies
+    - name: Install Kubernetes & Minikube
       run: |
-        sudo apt update && apt install -y curl
-        curl --version
-        sudo snap install kubectl --classic
+        sudo apt update && sudo apt install -y curl docker.io
         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
         sudo install minikube-linux-amd64 /usr/local/bin/minikube
-        sudo apt install -y docker.io
+        sudo snap install kubectl --classic
         sudo minikube start --driver=docker
 
     - name: Create deployment.yaml
@@ -96,15 +93,21 @@ jobs:
               port: 80
               targetPort: 5001
               nodePort: 30259  
-
         EOF
 
     - name: Apply Kubernetes manifests
       run: |
-        sudo kubectl apply -f deployment.yaml
-        sudo kubectl apply -f service.yaml
-        sudo minikube service flask-service
-        
-    - name: Update service.yaml with EC2 public IP
+        kubectl apply -f deployment.yaml
+        kubectl apply -f service.yaml
+        minikube service flask-service
+
+    - name: Retrieve EC2 Public IP
       run: |
-        sudo kubectl port-forward --address 0.0.0.0 svc/flask-service 30259:80  
+        INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+        PUBLIC_IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+        echo "EC2 Public IP: $PUBLIC_IP"
+
+    - name: Port Forwarding for Service
+      run: |
+        nohup kubectl port-forward --address 0.0.0.0 svc/flask-service 30259:80 &
+        echo "Port forwarding started. App should be accessible at http://$PUBLIC_IP:30259/"
