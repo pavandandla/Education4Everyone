@@ -44,8 +44,8 @@ jobs:
 
       - name: Deploy with CDK
         run: |
-          cdk deploy --app "python cdk/app.py" --require-approval never
-
+          PYTHONPATH=cdk cdk deploy --app "python cdk/app.py" --require-approval never
+          
       - name: Set up Kubernetes dependencies
         run: |
           sudo apt update && apt install -y curl
