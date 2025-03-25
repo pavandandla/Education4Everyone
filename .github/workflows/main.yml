@@ -45,7 +45,10 @@ jobs:
       - name: Deploy with CDK
         run: |
           export PYTHONPATH="\${PYTHONPATH}:\${PWD}/cdk"
-          cdk deploy --app "python cdk/app.py" --require-approval never
+          cd cdk
+          python app.py
+          cd ..
+          cdk deploy --require-approval never
           
       - name: Set up Kubernetes dependencies
         run: |
