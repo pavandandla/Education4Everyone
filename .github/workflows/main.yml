@@ -151,10 +151,12 @@ jobs:
         run: |
           # Verify Minikube status
           minikube status
-          minkube ip
+          minikube ip
           sudo kubectl apply -f deployment.yaml --validate=false
           sudo kubectl apply -f service.yaml --validate=false
           sudo minikube service flask-service
+
+
        
       - name: Update service.yaml with EC2 public IP
         run: |
