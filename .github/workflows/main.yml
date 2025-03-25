@@ -77,13 +77,21 @@ jobs:
           
           # Install Minikube
           chmod +x minikube-linux-amd64
-          sudo mv minikube-linux-amd64 /usr/local/bin
+          sudo mv minikube-linux-amd64 /usr/local/bin/minikube
+          
+          # Verify Minikube installation
+          minikube version
           
           # Install Docker
           sudo apt install -y docker.io
           sudo systemctl enable --now docker
           sudo usermod -aG docker $USER
+          
+          # Apply group changes
           newgrp docker
+          
+          # Verify Docker installation
+          docker --version
           
           # Start Minikube with Docker as the driver
           minikube start --driver=docker
