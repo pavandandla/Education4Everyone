@@ -9,17 +9,13 @@ class EC2Stack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # Reference existing VPC (modify if needed)
+        # ✅ Reference an existing VPC (Make sure the account and region are set in app.py)
         vpc = ec2.Vpc.from_lookup(self, "VPC", is_default=True)
 
-        # Reference existing EC2 instance correctly
-        instance = ec2.Instance.from_instance_attributes(
-            self, "MyInstance",
-            instance_id="i-06a682ac329b5a73a",
-            vpc=vpc
-        )
+        # ✅ Reference an existing EC2 instance
+        instance = ec2.Instance.from_lookup(self, "MyInstance", instance_id="i-06a682ac329b5a73a")
 
-        # Output instance public IP
+        # ✅ Output the Public IP of the referenced EC2 instance
         CfnOutput(
             self, "InstancePublicIP",
             value=instance.instance_public_ip,
