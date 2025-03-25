@@ -72,6 +72,9 @@ jobs:
           # Install kubectl via Snap
           sudo snap install kubectl --classic
           
+          # Verify kubectl installation
+          kubectl version --client
+          
           # Download Minikube binary
           curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
           
@@ -83,6 +86,8 @@ jobs:
           minikube version
           
           # Install Docker
+          sudo apt remove containerd
+          sudo apt autoremove
           sudo apt install -y docker.io
           sudo systemctl enable --now docker
           sudo usermod -aG docker $USER
