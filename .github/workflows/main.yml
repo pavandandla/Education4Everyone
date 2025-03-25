@@ -34,9 +34,13 @@ jobs:
         run: |
           aws sts get-caller-identity
 
+      - name: Bootstrap CDK
+        run: |
+          cdk bootstrap aws://$(aws sts get-caller-identity --query Account --output text)/us-east-1
+
       - name: Deploy with CDK
         run: |
-          cdk deploy --require-approval never
+          cdk deploy --app "python cdk/app.py" --require-approval never
 
       - name: Set up Kubernetes dependencies
         run: |
