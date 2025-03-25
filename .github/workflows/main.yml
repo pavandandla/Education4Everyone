@@ -152,8 +152,8 @@ jobs:
 
       - name: Apply Kubernetes manifests
         run: |
-          sudo kubectl apply -f deployment.yaml
-          sudo kubectl apply -f service.yaml
+          sudo kubectl apply -f deployment.yaml --validate=false
+          sudo kubectl apply -f service.yaml --validate=false
           sudo minikube service flask-service
        
       - name: Update service.yaml with EC2 public IP
