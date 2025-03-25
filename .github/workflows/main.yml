@@ -105,8 +105,8 @@ jobs:
           minikube status
           kubectl apply -f k8s-manifests/deployment.yaml
           kubectl apply -f k8s-manifests/service.yaml
-          echo "Waiting for 2 minute to let Kubernetes resources stabilize..."
-          sleep 120
+          echo "Waiting for 1.5 minute to let Kubernetes resources stabilize..."
+          sleep 90
           kubectl get deployments
           kubectl get services
           kubectl get pods
@@ -117,4 +117,5 @@ jobs:
        
       - name: Update service.yaml with EC2 public IP
         run: |
-          sudo kubectl port-forward --address 0.0.0.0 svc/flask-service 30259:80
+         kubectl port-forward --address 0.0.0.0 svc/flask-service 30259:80
+
