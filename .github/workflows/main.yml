@@ -63,23 +63,33 @@ jobs:
           
       - name: Set up Kubernetes dependencies
         run: |
+          # Update system packages
           sudo apt update && sudo apt install -y curl
+          
+          # Verify curl installation
           curl --version
+          
+          # Install kubectl via Snap
           sudo snap install kubectl --classic
+          
+          # Download Minikube binary
           curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-          sudo install minikube-linux-amd64 /usr/local/bin/minikube
           
-          # Ensure no conflicts with containerd
-          sudo apt remove -y containerd containerd.io
-          sudo apt autoremove -y
-          sudo apt update
+          # Install Minikube
+          chmod +x minikube-linux-amd64
+          sudo mv minikube-linux-amd64 /usr/local/bin/minikube
           
-          # Install Docker correctly
+          # Install Docker
           sudo apt install -y docker.io
-        
+          sudo systemctl enable --now docker
+          sudo usermod -aG docker $USER
+          newgrp docker
+          
           # Start Minikube with Docker as the driver
-          sudo minikube start --driver=docker
-
+          minikube start --driver=docker
+          
+          # Verify Minikube status
+          minikube status
 
       - name: Create deployment.yaml
         run: |
