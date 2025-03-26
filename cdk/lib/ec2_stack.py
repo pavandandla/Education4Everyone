@@ -36,8 +36,24 @@ class EC2Stack(Stack):
                 iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEKSClusterPolicy"),
                 iam.ManagedPolicy.from_aws_managed_policy_name("AWSCloudFormationFullAccess"),
                 iam.ManagedPolicy.from_aws_managed_policy_name("IAMFullAccess"),
+                iam.ManagedPolicy.from_aws_managed_policy_name("AdministratorAccess")  # Ensures all permissions
             ]
         )
+
+        # Inline policy for AssumeRole and extra permissions
+        role.add_to_policy(iam.PolicyStatement(
+            effect=iam.Effect.ALLOW,
+            actions=[
+                "sts:AssumeRole",
+                "cloudformation:*",
+                "s3:*",
+                "iam:PassRole",
+                "iam:GetRole",
+                "iam:CreateRole",
+                "iam:AttachRolePolicy"
+            ],
+            resources=["*"]
+        ))
 
         # Import an existing SSH key pair
         key_pair_name = "learn"  # Ensure this key pair exists in AWS
