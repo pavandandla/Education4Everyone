@@ -36,7 +36,10 @@ jobs:
           aws sts get-caller-identity
 
       - name: Bootstrap AWS CDK
-        run: cdk bootstrap
+        run: |
+          ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+          cdk bootstrap aws://$ACCOUNT_ID/us-east-1
+
 
       - name: Deploy Infrastructure with CDK
         run: |
