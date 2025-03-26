@@ -9,6 +9,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      EXISTING_ROLE_ARN: arn:aws:iam::288761772602:user/pavan # Replace with your actual role ARN
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
