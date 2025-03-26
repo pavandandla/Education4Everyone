@@ -1,23 +1,52 @@
-from aws_cdk import (
-    Stack,
-    aws_ec2 as ec2,
-    CfnOutput
-)
-from constructs import Construct  
+from aws_cdk import core as cdk
+from aws_cdk import aws_ec2 as ec2, aws_iam as iam
 
-class EC2Stack(Stack):
-    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
+class EC2Stack(cdk.Stack):
+    def __init__(self, scope: cdk.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
 
-        # ✅ Reference an existing VPC (Make sure the account and region are set in app.py)
-        vpc = ec2.Vpc.from_lookup(self, "VPC", is_default=True)
+        # Create a VPC
+        vpc = ec2.Vpc(self, "MyVpc", max_azs=2)
 
-        # ✅ Reference an existing EC2 instance
-        instance = ec2.Instance.from_lookup(self, "MyInstance", instance_id="i-06a682ac329b5a73a")
+        # Create a security group
+        security_group = ec2.SecurityGroup(
+            self, "WebServerSG", vpc=vpc, allow_all_outbound=True
+        )
+        security_group.add_ingress_rule(
+            ec2.Peer.any_ipv4(), ec2.Port.tcp(22), "Allow SSH access"
+        )
+        security_group.add_ingress_rule(
+            ec2.Peer.any_ipv4(), ec2.Port.tcp(80), "Allow HTTP access"
+        )
 
-        # ✅ Output the Public IP of the referenced EC2 instance
-        CfnOutput(
-            self, "InstancePublicIP",
-            value=instance.instance_public_ip,
-            description="Public IP address of the EC2 instance"
+        # Create an IAM role
+        role = iam.Role(
+            self, "TestRole",
+            assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"),
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMFullAccess"),
+                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryFullAccess"),
+                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonS3FullAccess"),
+                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2FullAccess"),
+                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonECRContainerRegistryFullAccess"),
+                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEKSClusterPolicy"),
+                iam.ManagedPolicy.from_aws_managed_policy_name("AWSCloudFormationFullAccess"),
+                iam.ManagedPolicy.from_aws_managed_policy_name("IAMFullAccess"),
+            ]
+        )
+
+        # Import an existing SSH key pair
+        key_pair_name = "learn"  # Ensure this key pair exists in AWS
+        key_pair = ec2.CfnKeyPair(self, "KeyPair", key_name=key_pair_name)
+
+        # Create an EC2 instance
+        ec2_instance = ec2.Instance(
+            self, "EC2Instance",
+            vpc=vpc,
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
+            security_group=security_group,
+            role=role,
+            instance_type=ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.LARGE),
+            machine_image=ec2.GenericLinuxImage({"us-east-1": "ami-084568db4383264d4", }),
+            key_name=key_pair_name,
         )
