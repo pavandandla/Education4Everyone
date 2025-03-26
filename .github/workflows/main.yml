@@ -36,8 +36,9 @@ jobs:
 
       - name: Bootstrap AWS CDK
         run: |
-          account_id=${{ vars.ACCOUNT_ID }}
-          cdk bootstrap --force aws://account_id/us-east-1
+          export ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+          echo $ACCOUNT_ID
+          cdk bootstrap --force aws://$ACCOUNT_ID/us-east-1
 
 
       - name: Deploy EC2Stack using AWS CDK
