@@ -3,11 +3,7 @@ kind: Service
 metadata:
   name: flask-service
 spec:
-<<<<<<< HEAD
   type: NodePort
-=======
-  type: LoadBalancer 
->>>>>>> cb120bbe3818fc31b3aae175102d14ca92f86432
   selector:
     app: flask
   ports:
