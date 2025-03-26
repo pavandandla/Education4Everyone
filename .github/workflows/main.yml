@@ -100,21 +100,6 @@ jobs:
           # Start Minikube with Docker as the driver
           minikube start --driver=docker
 
-      - name: Start Minikube Tunnel (Background)
-        run: |
-          sudo nohup minikube tunnel > /dev/null 2>&1 &
-
-      - name: Forward Kubernetes Port to EC2 Public IP   # 👈 ADD THIS STEP HERE
-        run: |
-          EC2_PUBLIC_IP=$(curl -s http://checkip.amazonaws.com)  
-          MINIKUBE_IP=$(minikube ip)  
-          echo "EC2 Public IP: $EC2_PUBLIC_IP"
-          echo "Minikube IP: $MINIKUBE_IP"
-          sudo iptables -t nat -A PREROUTING -p tcp --dport 30259 -j DNAT --to-destination $MINIKUBE_IP:30259
-          sudo iptables -t nat -A POSTROUTING -j MASQUERADE
-          echo "Port forwarding from EC2 Public IP to Minikube service is set up."
-
-
       - name: Apply Kubernetes manifests
         run: |
           minikube status
