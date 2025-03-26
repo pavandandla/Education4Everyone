@@ -3,6 +3,7 @@ from aws_cdk import (
     aws_ec2 as ec2,
 )
 from constructs import Construct
+from aws_cdk import aws_iam as iam
 import os
 
 class EC2Stack(Stack):
@@ -25,7 +26,7 @@ class EC2Stack(Stack):
         existing_role_arn = ('arn:aws:iam::288761772602:user/pavan')
 
         # Create an IAM role from the existing ARN
-        existing_role = ec2.Role.from_role_arn(self, "ExistingRole", existing_role_arn)
+        existing_role = iam.Role.from_role_arn(self, "ExistingRole", existing_role_arn)
 
         key_pair_name = "test-learn"
 
