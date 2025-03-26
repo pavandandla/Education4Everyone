@@ -27,8 +27,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ vars.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ vars.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: \${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: \${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
       - name: Verify AWS Authentication
@@ -37,9 +37,8 @@ jobs:
 
       - name: Bootstrap AWS CDK
         run: |
-          ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-          cdk bootstrap aws://$ACCOUNT_ID/us-east-1
-
+          ACCOUNT_ID=\$(aws sts get-caller-identity --query "Account" --output text)
+          cdk bootstrap aws://\$ACCOUNT_ID/us-east-1
 
       - name: Deploy Infrastructure with CDK
         run: |
@@ -48,20 +47,20 @@ jobs:
 
       - name: Retrieve EC2 Public IP
         run: |
-          EC2_PUBLIC_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=edu-learn" \
+          EC2_PUBLIC_IP=\$(aws ec2 describe-instances --filters "Name=tag:Name,Values=edu-learn" \
           --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
-          echo "EC2 Public IP: $EC2_PUBLIC_IP"
-          echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP" >> $GITHUB_ENV
+          echo "EC2 Public IP: \$EC2_PUBLIC_IP"
+          echo "EC2_PUBLIC_IP=\$EC2_PUBLIC_IP" >> \$GITHUB_ENV
 
       - name: Deploy Kubernetes Application on EC2
         env:
-          EC2_USER: "ubuntu"  # Change to "ec2-user" if using Amazon Linux
-          SSH_KEY: ${{ vars.EC2_SSH_PRIVATE_KEY }}
+          EC2_USER: "ubuntu"
+          SSH_KEY: \${{ secrets.EC2_SSH_PRIVATE_KEY }}
         run: |
-          echo "$SSH_KEY" > private_key.pem
+          echo "\$SSH_KEY" > private_key.pem
           chmod 600 private_key.pem
 
-          ssh -o StrictHostKeyChecking=no -i private_key.pem $EC2_USER@$EC2_PUBLIC_IP << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i private_key.pem \$EC2_USER@\$EC2_PUBLIC_IP << 'EOF'
             sudo apt update && sudo apt install -y curl snapd
             
             # Install kubectl
@@ -77,7 +76,7 @@ jobs:
             # Install Docker
             sudo apt install -y docker.io
             sudo systemctl enable --now docker
-            sudo usermod -aG docker $USER
+            sudo usermod -aG docker \$USER
 
             # Start Minikube
             sudo minikube start --driver=docker
@@ -92,13 +91,13 @@ jobs:
             kubectl get pods
 
             # Get the service NodePort
-            NODE_PORT=$(kubectl get service flask-service -o=jsonpath='{.spec.ports[0].nodePort}')
-            echo "NodePort: $NODE_PORT" >> /home/ubuntu/deployment.log
+            NODE_PORT=\$(kubectl get service flask-service -o=jsonpath='{.spec.ports[0].nodePort}')
+            echo "NodePort: \$NODE_PORT" >> /home/ubuntu/deployment.log
 
             # Forward service port to 80
-            nohup kubectl port-forward --address 0.0.0.0 svc/flask-service 80:$NODE_PORT > /dev/null 2>&1 &
+            nohup kubectl port-forward --address 0.0.0.0 svc/flask-service 80:\$NODE_PORT > /dev/null 2>&1 &
           EOF
 
       - name: Verify Deployment
         run: |
-          curl -v http://$EC2_PUBLIC_IP
+          curl -v http://\$EC2_PUBLIC_IP

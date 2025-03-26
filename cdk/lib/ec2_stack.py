@@ -9,10 +9,8 @@ class EC2Stack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
 
-        # Create a VPC
         vpc = ec2.Vpc(self, "MyVpc", max_azs=2)
 
-        # Create a security group
         security_group = ec2.SecurityGroup(
             self, "WebServerSG", vpc=vpc, allow_all_outbound=True
         )
@@ -23,7 +21,6 @@ class EC2Stack(Stack):
             ec2.Peer.any_ipv4(), ec2.Port.tcp(80), "Allow HTTP access"
         )
 
-        # Create an IAM role
         role = iam.Role(
             self, "TestRole",
             assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"),
@@ -36,11 +33,10 @@ class EC2Stack(Stack):
                 iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEKSClusterPolicy"),
                 iam.ManagedPolicy.from_aws_managed_policy_name("AWSCloudFormationFullAccess"),
                 iam.ManagedPolicy.from_aws_managed_policy_name("IAMFullAccess"),
-                iam.ManagedPolicy.from_aws_managed_policy_name("AdministratorAccess")  # Ensures all permissions
+                iam.ManagedPolicy.from_aws_managed_policy_name("AdministratorAccess")
             ]
         )
 
-        # Inline policy for AssumeRole and extra permissions
         role.add_to_policy(iam.PolicyStatement(
             effect=iam.Effect.ALLOW,
             actions=[
@@ -55,10 +51,8 @@ class EC2Stack(Stack):
             resources=["*"]
         ))
 
-        # Import an existing SSH key pair
-        key_pair_name = "test-learn"  # Ensure this key pair exists in AWS
+        key_pair_name = "test-learn"
 
-        # Create an EC2 instance
         ec2_instance = ec2.Instance(
             self, "EC2Instance",
             vpc=vpc,
@@ -67,5 +61,5 @@ class EC2Stack(Stack):
             role=role,
             instance_type=ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.LARGE),
             machine_image=ec2.GenericLinuxImage({"us-east-1": "ami-084568db4383264d4"}),
-            key_name=key_pair_name,
+            key_pair=ec2.KeyPair.from_key_pair_name(self, "KeyPair", key_pair_name),
         )
