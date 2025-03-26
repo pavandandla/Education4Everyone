@@ -110,29 +110,11 @@ jobs:
           kubectl get deployments
           kubectl get services
           kubectl get pods
-      - name: Forward Kubernetes Port to EC2 Public IP
-        run: |
-          EC2_PUBLIC_IP=$(curl -s http://checkip.amazonaws.com)  # Get EC2 public IP
-          MINIKUBE_IP=$(minikube ip)  # Get Minikube internal IP
-
-          echo "EC2 Public IP: $EC2_PUBLIC_IP"
-          echo "Minikube IP: $MINIKUBE_IP"
-
-          # Forward external traffic to Minikube service port
-          sudo iptables -t nat -A PREROUTING -p tcp --dport 30259 -j DNAT --to-destination $MINIKUBE_IP:31269
-          sudo iptables -t nat -A POSTROUTING -j MASQUERADE
-
-          echo "Port forwarding is set up."
-
-          #ssh -o StrictHostKeyChecking=no -L 30259:192.168.49.2:30259 ubuntu@172.31.40.36
-
+          ssh -o StrictHostKeyChecking=no -L 30259:192.168.49.2:30259 ubuntu@172.31.40.36:30259
+          curl http://172.31.40.36:30259
           #minikube service flask-service --url
           #curl http://192.168.49.2:30259
-          #curl http://localhost:30259
-
-
-
-
+          #curl http://172.31.40.36:30259
        
       #- name: Update service.yaml with EC2 public IP
         #run: |
