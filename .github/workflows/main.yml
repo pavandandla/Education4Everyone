@@ -41,7 +41,7 @@ jobs:
 
       - name: Deploy EC2Stack using AWS CDK
         run: |
-          cdk deploy EC2Stack --require-approval never
+          cdk deploy --app "python3 app.py" --require-approval never
 
       - name: Retrieve EC2 Public IP
         id: get-ec2-ip
