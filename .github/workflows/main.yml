@@ -105,13 +105,16 @@ jobs:
           minikube status
           kubectl apply -f k8s-manifests/deployment.yaml
           kubectl apply -f k8s-manifests/service.yaml
-          echo "Waiting for 1.5 minute to let Kubernetes resources stabilize..."
-          sleep 90
+          echo "Waiting for 1 minute to let Kubernetes resources stabilize..."
+          sleep 60
           kubectl get deployments
           kubectl get services
           kubectl get pods
           minikube service flask-service --url
           curl http://192.168.49.2:30259
+          ssh -L 30259:192.168.49.2:30259 ubuntu@34.229.106.24
+          curl http://localhost:30259
+
 
 
 
