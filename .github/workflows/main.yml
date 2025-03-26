@@ -111,7 +111,7 @@ jobs:
           kubectl get services
           kubectl get pods
           ssh -o StrictHostKeyChecking=no -L 30259:192.168.49.2:30259 ubuntu@172.31.40.36
-9
+
           #minikube service flask-service --url
           #curl http://192.168.49.2:30259
           #curl http://localhost:30259
