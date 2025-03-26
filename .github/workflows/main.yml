@@ -110,10 +110,11 @@ jobs:
           kubectl get deployments
           kubectl get services
           kubectl get pods
-          minikube service flask-service --url
-          curl http://192.168.49.2:30259
-          ssh -L 30259:192.168.49.2:30259 ubuntu@34.229.106.24
-          curl http://localhost:30259
+          curl http://34.229.106.24:30259
+          #minikube service flask-service --url
+          #curl http://192.168.49.2:30259
+          #ssh -L 30259:192.168.49.2:30259 ubuntu@34.229.106.24
+          #curl http://localhost:30259
 
 
 
