@@ -41,7 +41,6 @@ class EC2Stack(Stack):
 
         # Import an existing SSH key pair
         key_pair_name = "learn"  # Ensure this key pair exists in AWS
-        key_pair = ec2.CfnKeyPair(self, "KeyPair", key_name=key_pair_name)
 
         # Create an EC2 instance
         ec2_instance = ec2.Instance(

@@ -35,6 +35,9 @@ jobs:
         run: |
           aws sts get-caller-identity
 
+      - name: Bootstrap AWS CDK
+        run: cdk bootstrap
+
       - name: Deploy Infrastructure with CDK
         run: |
           cd cdk
