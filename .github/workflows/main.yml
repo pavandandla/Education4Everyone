@@ -32,24 +32,22 @@ jobs:
           aws-region: us-east-1
 
       - name: Verify AWS Authentication
-        run: |
-          aws sts get-caller-identity
+        run: aws sts get-caller-identity
 
       - name: Bootstrap AWS CDK
         run: |
           ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
           cdk bootstrap aws://$ACCOUNT_ID/us-east-1
 
-      - name: Deploy Infrastructure with CDK
+      - name: Deploy EC2Stack using AWS CDK
         run: |
-          cd cdk
-          cdk deploy --app "python app.py" --require-approval never
+          cdk deploy EC2Stack --require-approval never
 
       - name: Retrieve EC2 Public IP
+        id: get-ec2-ip
         run: |
-          EC2_PUBLIC_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=edu-learn" \
+          EC2_PUBLIC_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=EC2Instance" \
           --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
-          echo "EC2 Public IP: $EC2_PUBLIC_IP"
           echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP" >> $GITHUB_ENV
 
       - name: Deploy Kubernetes Application on EC2
@@ -60,9 +58,9 @@ jobs:
           echo "$SSH_KEY" > private_key.pem
           chmod 600 private_key.pem
 
-          ssh -o StrictHostKeyChecking=no -i private_key.pem \$EC2_USER@\$EC2_PUBLIC_IP << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i private_key.pem $EC2_USER@$EC2_PUBLIC_IP << 'EOF'
             sudo apt update && sudo apt install -y curl snapd
-            
+
             # Install kubectl
             sudo snap install kubectl --classic
             kubectl version --client
@@ -76,7 +74,7 @@ jobs:
             # Install Docker
             sudo apt install -y docker.io
             sudo systemctl enable --now docker
-            sudo usermod -aG docker \$USER
+            sudo usermod -aG docker $USER
 
             # Start Minikube
             sudo minikube start --driver=docker
@@ -91,13 +89,13 @@ jobs:
             kubectl get pods
 
             # Get the service NodePort
-            NODE_PORT=\$(kubectl get service flask-service -o=jsonpath='{.spec.ports[0].nodePort}')
-            echo "NodePort: \$NODE_PORT" >> /home/ubuntu/deployment.log
+            NODE_PORT=$(kubectl get service flask-service -o=jsonpath='{.spec.ports[0].nodePort}')
+            echo "NodePort: $NODE_PORT" >> /home/ubuntu/deployment.log
 
             # Forward service port to 80
-            nohup kubectl port-forward --address 0.0.0.0 svc/flask-service 80:\$NODE_PORT > /dev/null 2>&1 &
+            nohup kubectl port-forward --address 0.0.0.0 svc/flask-service 80:$NODE_PORT > /dev/null 2>&1 &
           EOF
 
       - name: Verify Deployment
         run: |
-          curl -v http://\$EC2_PUBLIC_IP
+          curl -v http://$EC2_PUBLIC_IP

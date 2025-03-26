@@ -1,9 +1,9 @@
 from aws_cdk import (
     Stack,
     aws_ec2 as ec2,
-    aws_iam as iam
 )
 from constructs import Construct
+import os
 
 class EC2Stack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs):
@@ -21,35 +21,11 @@ class EC2Stack(Stack):
             ec2.Peer.any_ipv4(), ec2.Port.tcp(80), "Allow HTTP access"
         )
 
-        role = iam.Role(
-            self, "TestRole",
-            assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"),
-            managed_policies=[
-                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMFullAccess"),
-                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2ContainerRegistryFullAccess"),
-                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonS3FullAccess"),
-                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2FullAccess"),
-                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonECRContainerRegistryFullAccess"),
-                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEKSClusterPolicy"),
-                iam.ManagedPolicy.from_aws_managed_policy_name("AWSCloudFormationFullAccess"),
-                iam.ManagedPolicy.from_aws_managed_policy_name("IAMFullAccess"),
-                iam.ManagedPolicy.from_aws_managed_policy_name("AdministratorAccess")
-            ]
-        )
+        # Use the existing IAM role ARN
+        existing_role_arn = os.getenv('EXISTING_ROLE_ARN', 'arn:aws:iam::288761772602:user/pavan')
 
-        role.add_to_policy(iam.PolicyStatement(
-            effect=iam.Effect.ALLOW,
-            actions=[
-                "sts:AssumeRole",
-                "cloudformation:*",
-                "s3:*",
-                "iam:PassRole",
-                "iam:GetRole",
-                "iam:CreateRole",
-                "iam:AttachRolePolicy"
-            ],
-            resources=["*"]
-        ))
+        # Create an IAM role from the existing ARN
+        existing_role = ec2.Role.from_role_arn(self, "ExistingRole", existing_role_arn)
 
         key_pair_name = "test-learn"
 
@@ -58,7 +34,7 @@ class EC2Stack(Stack):
             vpc=vpc,
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
             security_group=security_group,
-            role=role,
+            role=existing_role,
             instance_type=ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.LARGE),
             machine_image=ec2.GenericLinuxImage({"us-east-1": "ami-084568db4383264d4"}),
             key_pair=ec2.KeyPair.from_key_pair_name(self, "KeyPair", key_pair_name),
