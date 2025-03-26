@@ -1,8 +1,12 @@
-from aws_cdk import core as cdk
-from aws_cdk import aws_ec2 as ec2, aws_iam as iam
+from aws_cdk import (
+    Stack,
+    aws_ec2 as ec2,
+    aws_iam as iam
+)
+from constructs import Construct
 
-class EC2Stack(cdk.Stack):
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs):
+class EC2Stack(Stack):
+    def __init__(self, scope: Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
 
         # Create a VPC
@@ -47,6 +51,6 @@ class EC2Stack(cdk.Stack):
             security_group=security_group,
             role=role,
             instance_type=ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.LARGE),
-            machine_image=ec2.GenericLinuxImage({"us-east-1": "ami-084568db4383264d4", }),
+            machine_image=ec2.GenericLinuxImage({"us-east-1": "ami-084568db4383264d4"}),
             key_name=key_pair_name,
         )
