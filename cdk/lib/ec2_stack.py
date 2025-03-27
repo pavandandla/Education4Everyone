@@ -23,7 +23,7 @@ class EC2Stack(Stack):
         )
 
         # Use the existing IAM role ARN
-        existing_role_arn = ('arn:aws:iam::288761772602:user/pavan')
+        existing_role_arn = ('arn:aws:iam::288761772602:user/dsp')
 
         # Create an IAM role from the existing ARN
         existing_role = iam.Role.from_role_arn(self, "ExistingRole", existing_role_arn)
