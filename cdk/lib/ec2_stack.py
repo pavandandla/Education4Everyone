@@ -42,17 +42,4 @@ class EC2Stack(Stack):
             key_pair=ec2.KeyPair.from_key_pair_name(self, "KeyPair", key_pair_name),
         )
 
-         # Store the EC2 instance's public IP in SSM Parameter Store
-        ssm.StringParameter(
-            self,
-            "EC2PublicIP",
-            parameter_name="/ec2/public_ip",
-            string_value=ec2_instance.instance_public_ip,
-        )
-
-        # Allow Kubernetes access only from the EC2 instance (using public IP)
-        security_group.add_ingress_rule(
-            ec2.Peer.ipv4(f"{ec2_instance.instance_public_ip}/32"),
-            ec2.Port.tcp(30325),
-            "Allow Kubernetes from this EC2 instance only"
-        )
+        

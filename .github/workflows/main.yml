@@ -54,7 +54,16 @@ jobs:
         run: |
           EC2_PUBLIC_IP=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
           echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP" >> $GITHUB_ENV
+      
+      - name: Allow Kubernetes Access from EC2 Public IP
+        run: |
+          SECURITY_GROUP_ID=$(aws ec2 describe-security-groups --query "SecurityGroups[?GroupName=='WebServerSG'].GroupId" --output text)
+          EC2_PUBLIC_IP=${{ env.EC2_PUBLIC_IP }}
 
+          aws ec2 authorize-security-group-ingress --group-id $SECURITY_GROUP_ID --protocol tcp --port 30325 --cidr "$EC2_PUBLIC_IP/32"
+
+          echo "Ingress rule added to security group: $SECURITY_GROUP_ID"
+          
       - name: Deploy Kubernetes Application on EC2
         env:
           EC2_USER: "ubuntu"
@@ -93,15 +102,12 @@ jobs:
             kubectl get deployments
             kubectl get services
             kubectl get pods
-
-            # Get the service NodePort
-            NODE_PORT=$(kubectl get service flask-service -o=jsonpath='{.spec.ports[0].nodePort}')
-            echo "NodePort: $NODE_PORT" >> /home/ubuntu/deployment.log
+            minikube service flask-service
 
             # Forward service port to 80
-            nohup kubectl port-forward --address 0.0.0.0 svc/flask-service 80:$NODE_PORT > /dev/null 2>&1 &
+            nohup kubectl port-forward --address 0.0.0.0 svc/flask-service 30325:80 > /dev/null 2>&1 &
           EOF
 
       - name: Verify Deployment
         run: |
-          curl -v http://$EC2_PUBLIC_IP
+          curl  http://$EC2_PUBLIC_IP:30325/
