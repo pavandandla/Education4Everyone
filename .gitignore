@@ -1,2 +1,5 @@
 # Deployment code
 .env
+__pycache__
+cdk.out
+

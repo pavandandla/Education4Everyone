@@ -23,7 +23,7 @@ class EC2Stack(Stack):
         )
 
         # Use the existing IAM role ARN
-        existing_role_arn = ('arn:aws:iam::288761772602:user/dsp')
+        existing_role_arn = ('arn:aws:iam::288761772602:role/dsp-user')
 
         # Create an IAM role from the existing ARN
         existing_role = iam.Role.from_role_arn(self, "ExistingRole", existing_role_arn)
@@ -39,4 +39,12 @@ class EC2Stack(Stack):
             instance_type=ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.LARGE),
             machine_image=ec2.GenericLinuxImage({"us-east-1": "ami-084568db4383264d4"}),
             key_pair=ec2.KeyPair.from_key_pair_name(self, "KeyPair", key_pair_name),
+        )
+
+         # Fetch the public IP dynamically
+        ec2_public_ip = ec2_instance.instance_public_ip
+
+        # Allow HTTP access only from the EC2 instance itself (dynamic IP)
+        security_group.add_ingress_rule(
+            ec2.Peer.ipv4(f"{ec2_public_ip}/32"), ec2.Port.tcp(30325), "Allow HTTP from EC2 only"
         )
