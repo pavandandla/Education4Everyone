@@ -21,6 +21,10 @@ class EC2Stack(Stack):
         security_group.add_ingress_rule(
             ec2.Peer.any_ipv4(), ec2.Port.tcp(80), "Allow HTTP access"
         )
+         # Allow HTTP access only from the EC2 instance itself (dynamic IP)
+        security_group.add_ingress_rule(
+            ec2.Peer.ipv4(), ec2.Port.tcp(30325), "Allow Kubernetes from EC2 only"
+        )
 
         # Use the existing IAM role ARN
         existing_role_arn = ('arn:aws:iam::288761772602:role/dsp-user')
@@ -42,9 +46,9 @@ class EC2Stack(Stack):
         )
 
          # Fetch the public IP dynamically
-        ec2_public_ip = ec2_instance.instance_public_ip
+        #ec2_public_ip = ec2_instance.instance_public_ip
 
         # Allow HTTP access only from the EC2 instance itself (dynamic IP)
-        security_group.add_ingress_rule(
-            ec2.Peer.ipv4(f"{ec2_public_ip}/32"), ec2.Port.tcp(30325), "Allow HTTP from EC2 only"
-        )
+        #security_group.add_ingress_rule(
+            #ec2.Peer.ipv4(f"{ec2_public_ip}/32"), ec2.Port.tcp(30325), "Allow HTTP from EC2 only"
+       # )
